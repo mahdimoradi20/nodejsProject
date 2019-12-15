@@ -1,0 +1,187 @@
+
+<!DOCTYPE html>
+<html dir="rtl" lang="fa-IR">
+
+<head>
+
+    <meta charset="utf-8">
+    
+    <title></title>
+    <!-------------------------------Favicon-------------------------------------->
+    <link rel="shortcut icon" href="assets/images/favicon.png">
+
+    <!-------------------------------FontAwsome-------------------------------------->
+    <link rel="stylesheet" href="assets/css/lib/all.min.css">
+
+    <link rel="stylesheet" href="assets/css/lib/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/blog-single.css">
+    <!-------------------------------Slick Slider-------------------------------------->
+    <link rel="stylesheet" href="assets/css/lib/slick.css">
+    <link rel="stylesheet" href="assets/css/lib/slick-theme.css">
+
+    <script src="assets/js/lib/jquery-3.3.1.min.js"></script>
+    <script src="assets/js/lib/typed.min.js"></script>
+
+
+    <!-------------------------------Bootstarp-------------------------------------->
+    <script src="assets/js/lib/bootstrap.min.js"></script>
+
+    <!-------------------------------AOS : Scroll hide and show effects-------------------------------------->
+    <link rel="stylesheet" href="assets/css/lib/aos.css">
+    <script src="assets/js/lib/aos.js"></script>
+
+    <script src="assets/js/lib/smoothScroll.js"></script>
+
+</head>
+
+<body>
+
+    <!--------------------------BreadCrumbs Start-------------------------->
+    <section id="BreadCrumbs">
+        <div class="parallax">
+            <p class="breadcrumb py-5">
+                <a href="/userpanel" class="breadcrumb-item">پنل کاربری</a>
+                <a href="/exit" class="breadcrumb-item">خروج</a>
+            </p>
+        </div>
+    </section>
+    <!--------------------------BreadCrumbs End-------------------------->
+
+
+    <!--------------------------Main Start-------------------------->
+    <section id="Main">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-8 p-3" id="MainRightCol" style="background-color: lightblue;" >
+                    <div class="row">
+
+
+                        <!-- start from here -->
+                        {{#data}}
+
+
+                        <div class="col-12">
+                            <div class="PostCard">
+                                <div class="PostCardHeader">
+                                    <div class="PostCardHeaderRight">
+                                        <p id="PostCardTitle" style="font-size: 30px;">{{title}}</p>
+                                    </div>
+                                    <div class="PostCardHeaderLeft">
+                                        
+                                    </div>
+                                </div>
+                                <div class="PostCardBody">
+                                    <img src="/postfiles/{{path}}" alt="" id="PostCardMainImg"><br />
+                                    <div id="PostCardContent" style="">
+                                       {{{text}}}
+                                    </div>
+                                </div>
+                                <div class="PostCardFooter">
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col-12">
+                            <div id="frmComment">
+                                <form action="/addComment" method="POST" >
+                                    <div class="form-group">
+                                        <label for="fullname">نام کابری</label>
+                                        <input type="text" name="username" class="form-control rounded-0 py-2">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="commentTxt">نظر شما</label>
+                                        <textarea  name="commentTxt" cols="30" rows="10"
+                                            class="form-control rounded-0"></textarea>
+                                    </div>
+                                    <input type = "hidden" value = "{{postid}}" name = "pid" />
+                                    <input type="submit" value="ارسال">
+                                </form>
+                            </div>
+                        </div>
+                        {{/data}}
+                        <div class="col-12">
+                            <div class="Comments">
+                                <ul>
+                                        {{#comments}}
+                                        <div class="CommentCard" style="background-color: goldenrod;">
+                                           <div class="CommentCardRight">
+                                                <img src="assets/images/index/slideshow/3.jpg" alt=""
+                                                    class="CommentCardUserAlt">
+                                            </div>
+                                            <div class="CommentCardLeft">
+                                                        <span class = "fa fa-user"></span>
+                                                        <span  dir="rtl" style="font-size: 20px;">توسط:{{username}}</span>
+                                                        <br />
+                                                        <span class = "fa fa-clock"></span>
+                                                        <span dir="rtl"><b>در تاریخ</b>:{{commentdate}}</span>
+                                                <p style="font-size: 25px;">
+                                                    {{commentText}}
+                                                </p>
+                                                
+                                            </div>
+                                        </div>
+                                    </li>
+                                    {{/comments}}
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-4" id="MainLeftCol" style="background-color: burlywood;">
+                    <div class="sticky-top">
+                        <div>
+                            <form action="#" id="frmSearch">
+                                <div class="InputGroup">
+                                    <input class="InputGropInput" type="text" placeholder="جست و جو ..." id="search">
+                                    <button class="InputGroupIcon" type="submit"><span class="fa fa-search"></span></button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="Cat" id="Subjects">
+                            <div class="CatHeader">
+                                <p></p>
+                            </div>
+                            <div class="CatBody">
+                                
+                            </div>
+                        </div>
+                        <div class="Cat" id="Tags">
+                            <div class="CatHeader">
+                                <p></p>
+                            </div>
+                            <div class="CatBody">
+                                
+                            </div>
+                        </div>
+                        <div class="Cat" id="Links">
+                            <div class="CatHeader">
+                                <p></p>
+                            </div>
+                            <div class="CatBody">
+                            </div>
+                        </div>
+                        <div class="Cat" id="Archive">
+                            <div class="CatHeader">
+                                <p></p>
+                            </div>
+                            <div class="CatBody">
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--------------------------Main End-------------------------->
+
+    <!--------------------------Add JavaScripts------------------------------>
+
+    <script src="assets/js/lib/slick.min.js"></script>
+    <script src="assets/js/blog-single.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="assets/css/lib/bootstrap.min.css">
+  <script src="assets/js/lib/jquery-3.3.1.min.js"></script>
+  <script src="assets/js/lib/bootstrap.min.js"></script>
+  <script src="tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+
+  <script>
+    
+    tinymce.init({
+      selector: '#mytextarea',
+      language: "fa_IR" //
+    });
+    
+  </script>
+  <style>
+    body {
+      background-color: bisque;
+    }
+
+    form {
+      margin-top: 30px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+<form action = "http://localhost/addPost" method="POST" enctype="multipart/form-data" >
+    <label style="font-size: larger;"><b>:عنوان</b></label>
+    <input type="text" class="form-control" dir="rtl" name="title" /><br/>
+    <label style="font-size: larger; " dir="rtl"><b>در صورت تمایل می توانید یک تصویر برای پست خود بارگذاری
+        کنید:</b></label>
+    <input type="file" class="form-control" style="background-color: darksalmon;" name="picture" /><br />
+
+    <label style="font-size: larger; " dir="rtl"><b>فایل پیوستی خود را از اینجا انتخاب کنید:</b></label>
+    <input type="file" class="form-control" style="background-color: darksalmon;" name="file" /><br />
+
+    <textarea id="mytextarea" name="text" style="height: 400px;"></textarea><br />
+    {{{info}}}
+    <input type="submit" class="btn btn-primary form-control" value="کلیک کنید تا منتشر شود!" dir="rtl" name="send" />
+</form>
+  </div>
+  </script>
+</body>
+
+</html>

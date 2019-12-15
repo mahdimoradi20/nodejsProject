@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa-IR">
+
+<head>
+
+    <title>صفحه اصلی سایت</title>
+    <!-------------------------------Favicon-------------------------------------->
+    <link rel="shortcut icon" href="assets/images/favicon.png">
+
+    <!-------------------------------FontAwsome-------------------------------------->
+    <link rel="stylesheet" href="assets/css/lib/all.min.css">
+
+    <link rel="stylesheet" href="assets/css/lib/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/blog.css">
+    <!-------------------------------Slick Slider-------------------------------------->
+    <link rel="stylesheet" href="assets/css/lib/slick.css">
+    <link rel="stylesheet" href="assets/css/lib/slick-theme.css">
+
+    <script src="assets/js/lib/jquery-3.3.1.min.js"></script>
+    <script src="assets/js/post.js"></script>
+    <script src="assets/js/lib/typed.min.js"></script>
+
+
+    <!-------------------------------Bootstarp-------------------------------------->
+    <script src="assets/js/lib/bootstrap.min.js"></script>
+
+    <!-------------------------------AOS : Scroll hide and show effects-------------------------------------->
+    <link rel="stylesheet" href="assets/css/lib/aos.css">
+    <script src="assets/js/lib/aos.js"></script>
+
+    <script src="assets/js/lib/smoothScroll.js"></script>
+
+</head>
+
+<body>
+
+    <!--------------------------BreadCrumbs Start-------------------------->
+    <section id="BreadCrumbs">
+        <div class="parallax">
+            <p class="breadcrumb py-5">
+                <a href="/userpanel" class="breadcrumb-item">پنل کاربری</a>
+                <a href="/exit" class="breadcrumb-item">خروج</a>
+            </p>
+        </div>
+    </section>
+    <!--------------------------BreadCrumbs End-------------------------->
+
+
+    <!--------------------------Main Start-------------------------->
+    <section id="Main">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-8 p-3" id="MainRightCol" style="background-color: lightblue">
+                    <div class="row">
+
+                        {{#data}}
+
+
+                        <div class="col-6">
+                            <div class="BlogCard" style="background-color: yellowgreen">
+                                <div class="BlogCardHeader">
+                                    <img src="/postfiles/{{path}}" alt="">
+                                    <ul>
+                                        <li><span class="fa fa-user mr-1"></span><span>{{name}}</span></li>
+                                        <li><span class="fa fa-clock mr-1"></span>{{date}}<span></span></li>
+                                        <!--<li><span class="fa fa-comment mr-1"></span>{{count}}</li> -->
+                                    </ul>
+                                </div>
+                                <div class="BlogCardBody">
+                                    <p class="BlogCardTitle" style="font-size: 25px;"><b>{{title}}</b></p>
+                                    <!--<p class="BlogCardContent">
+                                        {{{text}}}
+                                    </p>-->
+                                </div>
+                                <div class="BlogCardFooter">
+
+                                    <form action="/getpost" method="GET">
+                                        <input type="hidden" name="id" value="{{postid}}" />
+                                        <input type="submit" value="ادامه مطلب" id="getPost" />
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        {{/data}}
+
+
+
+
+                    </div>
+                    <div class="row justify-content-center" id="pagination">
+                        <div class="col-6">
+                            <!----------------->
+                            <ul class="nav">
+                                <li class="nav-item">
+                                    <a href="#" class="navlink">
+                                        <span class="fa fa-angle-right"></span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <!------------------->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4" id="MainLeftCol" style="background-color: burlywood;">
+                    <div class="sticky-top">
+                        <div>
+                            <form action="/search" id="frmSearch" method="POST">
+                                <div class="InputGroup">
+                                    <input class="InputGropInput" type="text" placeholder=" جست و جو در عناوین مطالب ..." name="searchphase">
+                                    <button class="InputGroupIcon" type="submit"><span
+                                            class="fa fa-search"></span></button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="Cat" id="Subjects">
+                            <div class="CatHeader">
+                                <p dir="rtl">آخرین مطالب:</p>
+                            </div>
+                            <div class="CatBody">
+                                <ul>
+                                    {{#topfivepost}}
+                                    <li style="border-radius: 10%;border-style: solid;font-size: 20px;background-color: aqua;margin-top: 10px;">
+                                        
+                                        <a style = "margin :10px" href = "/getpost?id={{postid}}">{{title}}</a>
+                                        <span style="margin : 10px;">توسط:{{name}}</span>
+                                        
+                                    </li>
+                                    {{/topfivepost}}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="Cat" id="Tags">
+                            <div class="CatHeader">
+                            </div>
+                            <div class="CatBody">
+                                
+                            </div>
+                        </div>
+                        <div class="Cat" id="Links">
+                            <div class="CatHeader">
+                            </div>
+                            <div class="CatBody">
+                                
+                            </div>
+                        </div>
+                        <div class="Cat" id="Archive">
+                            <div class="CatHeader">
+                            </div>
+                            <div class="CatBody">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--------------------------Main End-------------------------->
+
+    <!--------------------------Add JavaScripts------------------------------>
+
+    <script src="assets/js/lib/slick.min.js"></script>
+    <script src="assets/js/blog.js"></script>
+
+</body>
+
+</html>

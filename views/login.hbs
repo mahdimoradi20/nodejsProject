@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sign-Up/Login Form</title>
+   <!-- <link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,300,600' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css"> -->
+    <link rel="stylesheet" href="./login/style.css">
+
+</head>
+
+<body>
+    <!-- partial:index.partial.html -->
+    <div class="form">
+
+        <ul class="tab-group">
+            <li class="tab"><a href="#signup">ایجاد حساب</a></li>
+            <li class="tab active"><a href="#login">ورود به سیستم</a></li>
+        </ul>
+
+        <div class="tab-content">
+
+            <div id="login">
+                <h1>خوش آمدید</h1>
+
+                <form action="/logincheck" method="post">
+
+                    <div class="field-wrap">
+                        <label>
+                             نام کاربری<span class="req">*</span>
+                        </label>
+                        <input type="text" required autocomplete="off" name="username" />
+                    </div>
+
+                    <div class="field-wrap">
+                        <label>
+                          رمز عبور<span class="req">*</span>
+                        </label>
+                        <input type="password" required autocomplete="off" name="password" />
+                    </div>
+
+                    <!-- <p class="forgot"><a href="#">Forgot Password?</a></p>-->
+                    <p id="status">{{status}}</p>
+                    <button class="button button-block" />ورود</button>
+
+                </form>
+
+            </div>
+
+            <div id="signup">
+                <h1>ایجاد حساب جدید</h1>
+
+                <form action="/submit" method="post">
+
+                    <div class="top-row">
+                        <div class="field-wrap">
+                            <label>
+                                نام<span class="req">*</span>
+                            </label>
+                            <input type="text" required autocomplete="off" name="name" />
+                        </div>
+
+                        <div class="field-wrap">
+                            <label>
+                                نام کاربری<span class="req">*</span>
+                            </label>
+                            <input type="text" required autocomplete="off" name="username" />
+                        </div>
+                    </div>
+
+                    <div class="field-wrap">
+                        <label>
+                            نوع حساب<span class="req">*</span>
+                        </label>
+                        <input type="text" required autocomplete="off" name="type" />
+                    </div>
+
+                    <div class="field-wrap">
+                        <label>
+                            کلمه عبور<span class="req">*</span>
+                        </label>
+                        <input type="password" required autocomplete="off" name="password" />
+                    </div>
+                    <p id="status">{{status_submit}}</p>
+                    <button type="submit" class="button button-block" />ایجاد حساب</button>
+
+                </form>
+
+            </div>
+
+
+        </div><!-- tab-content -->
+
+    </div> <!-- /form -->
+    <!-- partial -->
+    <script src='./js/jquery.js'></script>
+    <script src="./login/script.js"></script>
+
+</body>
+
+</html>
