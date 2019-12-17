@@ -10,6 +10,9 @@
     <script src="assets/jquery-3.3.1.min.js"></script>
     <script src="assets/bootstrap.min.js"></script>
     <style>
+        body{
+            background-color: mediumturquoise ;
+        }
         #comments
         {
             background-color: rgb(235, 217, 172);
@@ -42,11 +45,12 @@
 
 <body>
     <div class="container">
-        <div class="jumbotron" style="background-color: coral">
+        <div class="jumbotron" style="background-color:oldlace">
             <h1 class="display-4">سلام استاد "نام استاد اینجا می آید</h1>
-            <p class="lead">صفحه ای که در آن هستید پنل کاربری شماست! از اینجا میتوانید مطالب خود را برای دانشجویان منتشر
+            <p class="lead" style="color: olive;">صفحه ای که در آن هستید پنل کاربری شماست! از اینجا میتوانید مطالب خود را برای دانشجویان منتشر
                 کنید نظرات آن ها را مشاهده و تایید یا رد نمایید</p>
             <hr class="my-4">
+            
         </div>
 
         <div class = "row">
@@ -57,8 +61,13 @@
 
         <div class = "row">
             <div class = "col-md-6" id = "comments">
-                <p style="font-size: larger;">نظرات تایید نشده:</p>
-
+                <p style="font-size: larger;direction: rtl;">نظرات تایید نشده:</p>
+                <div id = "postbox"  dir ="rtl" style="background-color: aqua;">
+                    <span class="buttons" style="font-size: 25px;color:brown">نام نظر دهنده اینجا می آید</span> <br />
+                    <span style = "margin-right: 10px;font-size: 20px;margin-top: 5px;">متن نظر در اینجا می آید</span>
+                    <br /><a class="btn btn-success" style="margin-right: 50%;margin-top: 10px;margin-bottom: 10px;">تایید</a>
+                    <a class="btn btn-danger" class="buttons" >عدم تایید</a>
+                </div>
             </div>
             <div class = "col-md-6" style="background-color: darkkhaki;height: 300px ;">
                 <p style="font-size: larger;direction: rtl;">پست های ارسالی توسط شما:</p>
