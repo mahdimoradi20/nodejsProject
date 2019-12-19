@@ -50,7 +50,7 @@
     <section id="Main">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-8 p-3" id="MainRightCol" style="background-color: lightblue">
+                <div class="col-8 p-3" id="MainRightCol" style="background-color: dimgray">
                     <div class="row">
 
                         {{#data}}
@@ -60,8 +60,8 @@
                             <div class="BlogCard" style="background-color: yellowgreen">
                                 <div class="BlogCardHeader">
                                     <img src="/postfiles/{{path}}" alt="">
-                                    <ul>
-                                        <li><span class="fa fa-user mr-1"></span><span>{{name}}</span></li>
+                                    <ul dir="rtl">
+                                        <li><span style = "font-size: 30px;" class="fa fa-user mr-1"></span><span style = "font-size: 30px;">{{name}}</span></li>
                                         <li><span class="fa fa-clock mr-1"></span>{{date}}<span></span></li>
                                         <!--<li><span class="fa fa-comment mr-1"></span>{{count}}</li> -->
                                     </ul>
@@ -93,18 +93,18 @@
                     <div class="row justify-content-center" id="pagination">
                         <div class="col-6">
                             <!----------------->
-                            <ul class="nav">
+                           <!-- <ul class="nav">
                                 <li class="nav-item">
                                     <a href="#" class="navlink">
                                         <span class="fa fa-angle-right"></span>
                                     </a>
                                 </li>
-                            </ul>
+                            </ul> -->
                             <!------------------->
                         </div>
                     </div>
                 </div>
-                <div class="col-4" id="MainLeftCol" style="background-color: burlywood;">
+                <div class="col-4" id="MainLeftCol" style="background-color: rgb(247, 118, 214);">
                     <div class="sticky-top">
                         <div>
                             <form action="/search" id="frmSearch" method="POST">

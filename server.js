@@ -179,7 +179,7 @@ let getUser = (userid) => {
 app.get("/getpost", (req, res) => {
     if (req.session.user) {
         let status;
-        if (req.query.s == 'ok') status = "<p style = 'color:red;font-size:28px'>نظر با موفقیت ارسال شد. و پس از تایید به نمایش در خواهد آمد</p>";
+        if (req.query.s == 'ok') status = "<br /><p style = 'font-size:20px;background-color : lightgreen' id = 'r' >نظر با موفقیت ارسال شد. و پس از تایید به نمایش در خواهد آمد</p>";
         connection.query("Select * from posts where postid = " + req.query.id, async (err, result, field) => {
             if (err) console.log(err)
             else {
@@ -192,7 +192,7 @@ app.get("/getpost", (req, res) => {
                         if (result[0]['attach'] !== "")
                             file = "<a style = 'font-size:20px;' href = '/postfiles/" + username + "/" + result[0]['attach'] + "' >برای دریافت پیوست کلیک کنید</a>";
 
-                        res.render("blog-single", { data: result, comments: result2, st: status, attach: file });
+                        res.render("blog-single", { data: result, comments: result2, st: status, attach: file , postid : result[0]['postid'] });
                     }
                 });
             }
@@ -312,7 +312,7 @@ app.post('/addComment', (req, res) => {
                 let commentdate = formatDate(new Date())
                 connection.query("insert into comments (commentText,postid,userid,commentdate,status) values (?,?,?,?,?)",
                     [req.body.commentTxt, postid, userid, commentdate, 'waiting'], (err2, results2, field2) => {
-                        res.redirect("/getpost?id=" + postid + '&s=ok');
+                        res.redirect("/getpost?id=" + postid + '&s=ok#r');
                     });
             }
         });
@@ -367,6 +367,7 @@ let getPosts = (userid) => {
 app.get('/userpanel', async (req, res) => {
 
     if (req.session.user) {
+        if(req.session.type == "استاد"){
         let status;
         if (req.query.s == 1)
             status = "<p style = 'color : green; font-size : 25px'>نظر با موفقیت حذف شد</p>";
@@ -381,7 +382,9 @@ app.get('/userpanel', async (req, res) => {
         for (i = 0; i < post_comments.length; i++)
             post_comments[i]['sname'] = await getUsername(post_comments[i]['sname']);
         res.render("userpanel", { posts: t_posts, comments: post_comments, st: status, name: t_name });
-
+        }
+        else
+            res.send("شما اجازه دسترسی به این بخش را ندارید!");
     }
     else
         res.redirect("/");
