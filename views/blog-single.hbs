@@ -5,8 +5,9 @@
 <head>
 
     <meta charset="utf-8">
+    {{#data}}
     
-    <title></title>
+    <title>{{title}}</title>
     <!-------------------------------Favicon-------------------------------------->
     <link rel="shortcut icon" href="assets/images/favicon.png">
 
@@ -40,6 +41,7 @@
     <section id="BreadCrumbs">
         <div class="parallax">
             <p class="breadcrumb py-5">
+                <a href="/blog" class="breadcrumb-item">بازگشت به صفحه اصلی</a>
                 <a href="/userpanel" class="breadcrumb-item">پنل کاربری</a>
                 <a href="/exit" class="breadcrumb-item">خروج</a>
             </p>
@@ -57,7 +59,6 @@
 
 
                         <!-- start from here -->
-                        {{#data}}
 
 
                         <div class="col-12">

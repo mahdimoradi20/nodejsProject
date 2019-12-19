@@ -313,21 +313,33 @@ let getUserID = (username)=>{
 
 let getUsername = (userid)=>{
     return new Promise((resolve,reject)=>{
-        connection.query('Select username from users where userid = ?',[userid],(err,result,field)=>{
+        connection.query('Select name from users where userid = ?',[userid],(err,result,field)=>{
             if(err) reject(err);
             else
-                resolve(result[0]['username']);
+                resolve(result[0]['name']);
         })
     });
 }
 
 let getComments = (userid)=>{
     return new Promise((resolve,reject)=>{
-        connection.query("SELECT commentid,title, commentText, comments.userid as sname, comments.commentdate as date from posts,users,comments where status = 'waiting' and posts.userid = users.userid and comments.postid = posts.postid and posts.userid = ?",
+        connection.query("SELECT commentid,title, commentText, comments.userid as sname, comments.commentdate as date from posts,users,comments where status = 'waiting' and posts.userid = users.userid and comments.postid = posts.postid and posts.userid = ? order by date desc",
         [userid],(err,result,field)=>{
             if(err) reject(err);
             else
                 resolve(result);
+        });
+    });
+}
+
+let getPosts = (userid) =>{
+    return new Promise((resolve,reject)=>{
+        connection.query("Select title,date,postid from posts where userid = ? order by date desc",[userid],(err,result,field)=>{
+            if(err) reject(err);
+            else
+            {
+                resolve(result);
+            }
         });
     });
 }
@@ -338,15 +350,18 @@ app.get('/userpanel',async (req,res)=>{
     {
         let status;
         if(req.query.s == 1)
-            status = "<p style = 'color : green; font-size : 25px'>نظر با موفقیت حذف شد</p>"
+            status = "<p style = 'color : green; font-size : 25px'>نظر با موفقیت حذف شد</p>";
         else if(req.query.s == 2)
-        status = "<p style = 'color : green; font-size : 25px'>نظر تایید شده و در پایین پست نمایش داده خواهد شد</p>"
-
+             status = "<p style = 'color : green; font-size : 25px'>نظر تایید شده و در پایین پست نمایش داده خواهد شد</p>";
+        if(req.query.s == 3)
+            status = "<p style = 'color : green; font-size : 25px'>پست با موفقیت حذف شد</p>"
         let userid = await getUserID(req.session.user);
+        let t_name = await getUsername(userid);
         let post_comments = await getComments(userid);
+        let t_posts = await getPosts(userid);
         for(i = 0 ; i < post_comments.length; i++)
             post_comments[i]['sname'] = await  getUsername(post_comments[i]['sname']);
-        res.render("userpanel" , {comments : post_comments , st : status});
+        res.render("userpanel" , {posts : t_posts,comments : post_comments , st : status, name : t_name});
         
     }
     else
@@ -381,6 +396,24 @@ app.get("/confirmComment",(req,res)=>{
                 if(err) console.log(err);
                 else
                     res.redirect("/userpanel?s=2")
+            });
+        }
+        else
+            res.send("شما اجازه چنین کاری را ندارید!");
+    }
+    else
+        res.redirect('/');
+});
+
+app.get("/delPost",(req,res)=>{
+    if(req.session.user)
+    {
+        if(req.session.type == 'استاد')
+        {
+            connection.query("delete from posts where postid = ? ",[req.query.id],(err,result,field)=>{
+                if(err) console.log(err);
+                else
+                    res.redirect("/userpanel?s=3")
             });
         }
         else
