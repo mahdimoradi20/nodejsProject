@@ -67,7 +67,7 @@
                 <div id = "postbox"  dir ="rtl" style="background-color: aqua;">
                     <span class="buttons" style="font-size: 25px;color:brown">{{sname}}</span> <br />
                     <span style = "margin-right: 10px;font-size: 20px;margin-top: 5px;">{{commentText}}</span>
-                    <br /><a class="btn btn-success" style="margin-right: 50%;margin-top: 10px;margin-bottom: 10px;">تایید</a>
+                    <br /><a class="btn btn-success" style="margin-right: 50%;margin-top: 10px;margin-bottom: 10px;" href = "/confirmComment?id={{commentid}}">تایید</a>
                     <a class="btn btn-danger" class="buttons" href = "/delComment?id={{commentid}}" >عدم تایید</a>
                 </div>
     {{/comments}}

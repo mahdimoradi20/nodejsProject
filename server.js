@@ -338,9 +338,10 @@ app.get('/userpanel',async (req,res)=>{
     {
         let status;
         if(req.query.s == 1)
-        {
             status = "<p style = 'color : green; font-size : 25px'>نظر با موفقیت حذف شد</p>"
-        }
+        else if(req.query.s == 2)
+        status = "<p style = 'color : green; font-size : 25px'>نظر تایید شده و در پایین پست نمایش داده خواهد شد</p>"
+
         let userid = await getUserID(req.session.user);
         let post_comments = await getComments(userid);
         for(i = 0 ; i < post_comments.length; i++)
@@ -370,6 +371,25 @@ app.get("/delComment",(req,res)=>{
     else
         res.redirect('/');
 });
+
+app.get("/confirmComment",(req,res)=>{
+    if(req.session.user)
+    {
+        if(req.session.type == 'استاد')
+        {
+            connection.query("update comments set status ='ok' where commentid = ? ",[req.query.id],(err,result,field)=>{
+                if(err) console.log(err);
+                else
+                    res.redirect("/userpanel?s=2")
+            });
+        }
+        else
+            res.send("شما اجازه چنین کاری را ندارید!");
+    }
+    else
+        res.redirect('/');
+});
+
 
 console.log("App is running on Port 80...");
 app.listen(80);
