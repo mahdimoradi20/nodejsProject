@@ -75,6 +75,8 @@
                                     <img src="/postfiles/{{path}}" alt="" id="PostCardMainImg"><br />
                                     <div id="PostCardContent" style="">
                                        {{{text}}}
+                        {{/data}}
+                                    {{{attach}}}
                                     </div>
                                 </div>
                                 <div class="PostCardFooter">
@@ -89,14 +91,13 @@
                                     </div>
                                     
                                     <div class="form-group">
-                                        <label for="commentTxt">نظر شما</label>
+                                        <label for="commentTxt" style = "font-size: 30px;">نظر شما</label>
                                         <textarea  name="commentTxt" cols="30" rows="10"
                                             class="form-control rounded-0"></textarea>
                                     </div>
                                     <input type = "hidden" value = "{{postid}}" name = "pid" />
-                        {{/data}}
-                                    <input type="submit" value="ارسال">
                                     {{{st}}} 
+                                    <input type="submit" value="ارسال">
                                 </form>
                             </div>
                         </div>

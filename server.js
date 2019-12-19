@@ -113,7 +113,9 @@ app.post("/submit", async (req, res) => {
                 else {
                     req.session.user = username;
                     req.session.type = type;
-                    res.redirect("/");
+                    fs.mkdir(__dirname + "/public/postfiles/" + username, () => {
+                        res.redirect("/");
+                    })
                 }
             });
     }
@@ -164,19 +166,33 @@ app.post("/search", (req, res) => {
         res.render("login");
 });
 
+let getUser = (userid) => {
+    return new Promise((resolve, reject) => {
+        connection.query("Select username from users where userid = ?", [userid], (err, result, field) => {
+            if (err) reject(err);
+            else
+                resolve(result[0]['username']);
+        });
+    });
+}
 
 app.get("/getpost", (req, res) => {
     if (req.session.user) {
         let status;
-        if(req.query.s == 'ok') status = "<p>نظر با موفقیت ارسال شد. و پس از تایید به نمایش در خواهد آمد</p>" ;
-        connection.query("Select * from posts where postid = " + req.query.id, (err, result, field) => {
+        if (req.query.s == 'ok') status = "<p style = 'color:red;font-size:28px'>نظر با موفقیت ارسال شد. و پس از تایید به نمایش در خواهد آمد</p>";
+        connection.query("Select * from posts where postid = " + req.query.id, async (err, result, field) => {
             if (err) console.log(err)
             else {
-                connection.query('SELECT username,commentText,commentdate from posts,comments,users where comments.postid = posts.postid and comments.userid = users.userid and status = "ok" and posts.postid = ' + req.query.id + "  order by commentdate DESC ",[],(err2,result2,field2)=>{
-                    if(err2)console.log(err2);
-                    else
-                    {
-                        res.render("blog-single", { data: result , comments : result2 , st : status});
+                let userid = result[0]['userid'];
+                let username = await getUser(userid);
+                connection.query('SELECT username,commentText,commentdate from posts,comments,users where comments.postid = posts.postid and comments.userid = users.userid and status = "ok" and posts.postid = ' + req.query.id + "  order by commentdate DESC ", [], (err2, result2, field2) => {
+                    if (err2) console.log(err2);
+                    else {
+                        let file = "";
+                        if (result[0]['attach'] !== "")
+                            file = "<a style = 'font-size:20px;' href = '/postfiles/" + username + "/" + result[0]['attach'] + "' >برای دریافت پیوست کلیک کنید</a>";
+
+                        res.render("blog-single", { data: result, comments: result2, st: status, attach: file });
                     }
                 });
             }
@@ -214,7 +230,7 @@ let copyUploadedfile = (oldpath, newpath) => {
 
 let formatDate = (date) => {
     var year = date.getFullYear(),
-        month = date.getMonth() + 1, 
+        month = date.getMonth() + 1,
         day = date.getDate(),
         hour = date.getHours(),
         minute = date.getMinutes(),
@@ -231,6 +247,7 @@ let formatDate = (date) => {
 
 app.post("/addPost", (req, res) => {
 
+    if (!req.session.user) res.redirect('/');
     let username = req.session.user;
     var form = new formidable.IncomingForm();
     form.parse(req, async (err, fields, files) => {
@@ -238,13 +255,15 @@ app.post("/addPost", (req, res) => {
         let filepath = files['file']['path'];
         let filename = files['file']['name'];
         let picname = files['picture']['name'];
-        let newpicpath = __dirname + "/public/postfiles/" + files['picture']['name'];
-        let newfilepath = __dirname + "/public/postfiles/" + files['file']['name'];
+        let newpicpath = __dirname + "/public/postfiles/" + req.session.user + "/" + files['picture']['name'];
+        let newfilepath = __dirname + "/public/postfiles/" + req.session.user + '/' + files['file']['name'];
         if (files['picture']['size'] > 0) {
             if (files['picture']['type'].includes('image'))
                 await copyUploadedfile(picpath, newpicpath);
-            else
-                res.render("editor", { info: '<span style = "border-style : solid;color : yellow; fontsize : 35px;background-color : red;" >فایل ارسالی برای  برای پست حتما باید از نوع تصویر باشد</span>' });
+            else {
+                res.render("editor", { info: '<p style = "border-style : solid;color : yellow; fontsize : 40px;background-color : red;direction : rtl" >فایل ارسالی برای  برای پست حتما باید از نوع تصویر باشد</p>' });
+                return;   
+            }
         }
         else
             picname = "default.jpg";
@@ -262,12 +281,14 @@ app.post("/addPost", (req, res) => {
                     const text = fields['text'];
                     const title = fields['title'];
                     let datetime = formatDate(new Date());
-                    if (title == "")
-                        res.render('editor', { info: '<span style = "border-style : solid;color : yellow; fontsize : 35px;background-color : red;" >عنوان نمیتواند خالی باشد</span>' });
+                    if (title == "") {
+                        res.render('editor', { info: '<p style = "border-style : solid;color : yellow; fontsize : 40px;background-color : red;direction : rtl" >عنوان نمیتواند خالی باشد</p>' });
+                        return;
+                    }
                     connection.query("insert into posts (text,userid,title,path,attach,date) values(?,?,?,?,?,?)",
                         [text, userid, title, picname, filename, datetime], (err3, results2, field2) => {
                             if (err3) console.log(err3);
-                            res.render("editor", { info: '<span style = "border-style : solid;color : black; fontsize : 35px;background-color : lightgreen;">پست با موفقیت ارسال شد!</span>' });
+                            res.render("editor", { info: '<p style = "border-style : solid;color : black; fontsize : 40px;background-color : lightgreen;direction :rtl">پست با موفقیت ارسال شد!</p>' });
                         });
                     break;
                 }
@@ -280,7 +301,7 @@ app.post("/addPost", (req, res) => {
 
 
 
-app.post('/addComment',  (req, res) => {
+app.post('/addComment', (req, res) => {
     if (req.session.user) {
         let userid;
         let postid = req.body.pid;
@@ -290,9 +311,9 @@ app.post('/addComment',  (req, res) => {
                 userid = result[0]['userid'];
                 let commentdate = formatDate(new Date())
                 connection.query("insert into comments (commentText,postid,userid,commentdate,status) values (?,?,?,?,?)",
-                 [req.body.commentTxt,postid,userid,commentdate,'waiting'] , (err2,results2,field2)=>{
-                     res.redirect("/getpost?id="+postid + '&s=ok');
-                 });
+                    [req.body.commentTxt, postid, userid, commentdate, 'waiting'], (err2, results2, field2) => {
+                        res.redirect("/getpost?id=" + postid + '&s=ok');
+                    });
             }
         });
     }
@@ -301,81 +322,77 @@ app.post('/addComment',  (req, res) => {
     }
 });
 
-let getUserID = (username)=>{
-    return new Promise((resolve,reject)=>{
-        connection.query("Select userid from users where username =  ? ",[username],(err,result,field)=>{
-            if(err) reject(err);
+let getUserID = (username) => {
+    return new Promise((resolve, reject) => {
+        connection.query("Select userid from users where username =  ? ", [username], (err, result, field) => {
+            if (err) reject(err);
             else
                 resolve(result[0]['userid']);
         });
     });
 }
 
-let getUsername = (userid)=>{
-    return new Promise((resolve,reject)=>{
-        connection.query('Select name from users where userid = ?',[userid],(err,result,field)=>{
-            if(err) reject(err);
+let getUsername = (userid) => {
+    return new Promise((resolve, reject) => {
+        connection.query('Select name from users where userid = ?', [userid], (err, result, field) => {
+            if (err) reject(err);
             else
                 resolve(result[0]['name']);
         })
     });
 }
 
-let getComments = (userid)=>{
-    return new Promise((resolve,reject)=>{
+let getComments = (userid) => {
+    return new Promise((resolve, reject) => {
         connection.query("SELECT commentid,title, commentText, comments.userid as sname, comments.commentdate as date from posts,users,comments where status = 'waiting' and posts.userid = users.userid and comments.postid = posts.postid and posts.userid = ? order by date desc",
-        [userid],(err,result,field)=>{
-            if(err) reject(err);
-            else
-                resolve(result);
-        });
+            [userid], (err, result, field) => {
+                if (err) reject(err);
+                else
+                    resolve(result);
+            });
     });
 }
 
-let getPosts = (userid) =>{
-    return new Promise((resolve,reject)=>{
-        connection.query("Select title,date,postid from posts where userid = ? order by date desc",[userid],(err,result,field)=>{
-            if(err) reject(err);
-            else
-            {
+let getPosts = (userid) => {
+    return new Promise((resolve, reject) => {
+        connection.query("Select title,date,postid from posts where userid = ? order by date desc", [userid], (err, result, field) => {
+            if (err) reject(err);
+            else {
                 resolve(result);
             }
         });
     });
 }
 
-app.get('/userpanel',async (req,res)=>{
+app.get('/userpanel', async (req, res) => {
 
-    if(req.session.user)
-    {
+    if (req.session.user) {
         let status;
-        if(req.query.s == 1)
+        if (req.query.s == 1)
             status = "<p style = 'color : green; font-size : 25px'>نظر با موفقیت حذف شد</p>";
-        else if(req.query.s == 2)
-             status = "<p style = 'color : green; font-size : 25px'>نظر تایید شده و در پایین پست نمایش داده خواهد شد</p>";
-        if(req.query.s == 3)
+        else if (req.query.s == 2)
+            status = "<p style = 'color : green; font-size : 25px'>نظر تایید شده و در پایین پست نمایش داده خواهد شد</p>";
+        if (req.query.s == 3)
             status = "<p style = 'color : green; font-size : 25px'>پست با موفقیت حذف شد</p>"
         let userid = await getUserID(req.session.user);
         let t_name = await getUsername(userid);
         let post_comments = await getComments(userid);
         let t_posts = await getPosts(userid);
-        for(i = 0 ; i < post_comments.length; i++)
-            post_comments[i]['sname'] = await  getUsername(post_comments[i]['sname']);
-        res.render("userpanel" , {posts : t_posts,comments : post_comments , st : status, name : t_name});
-        
+        for (i = 0; i < post_comments.length; i++)
+            post_comments[i]['sname'] = await getUsername(post_comments[i]['sname']);
+        res.render("userpanel", { posts: t_posts, comments: post_comments, st: status, name: t_name });
+
     }
     else
         res.redirect("/");
 });
 
 
-app.get("/delComment",(req,res)=>{
-    if(req.session.user)
-    {
-        if(req.session.type == 'استاد')
-        {
-            connection.query("delete from comments where commentid = ?",[req.query.id],(err,result,field)=>{
-                if(err) console.log(err);
+app.get("/delComment", (req, res) => {
+    if (req.session.user) {
+        if (req.session.type == 'استاد') {
+            connection.query("delete from comments where commentid = ?", [req.query.id], (err, result, field) => {
+                if (err) console.log(err);
                 else
                     res.redirect("/userpanel?s=1")
             });
@@ -387,13 +404,11 @@ app.get("/delComment",(req,res)=>{
         res.redirect('/');
 });
 
-app.get("/confirmComment",(req,res)=>{
-    if(req.session.user)
-    {
-        if(req.session.type == 'استاد')
-        {
-            connection.query("update comments set status ='ok' where commentid = ? ",[req.query.id],(err,result,field)=>{
-                if(err) console.log(err);
+app.get("/confirmComment", (req, res) => {
+    if (req.session.user) {
+        if (req.session.type == 'استاد') {
+            connection.query("update comments set status ='ok' where commentid = ? ", [req.query.id], (err, result, field) => {
+                if (err) console.log(err);
                 else
                     res.redirect("/userpanel?s=2")
             });
@@ -405,13 +420,11 @@ app.get("/confirmComment",(req,res)=>{
         res.redirect('/');
 });
 
-app.get("/delPost",(req,res)=>{
-    if(req.session.user)
-    {
-        if(req.session.type == 'استاد')
-        {
-            connection.query("delete from posts where postid = ? ",[req.query.id],(err,result,field)=>{
-                if(err) console.log(err);
+app.get("/delPost", (req, res) => {
+    if (req.session.user) {
+        if (req.session.type == 'استاد') {
+            connection.query("delete from posts where postid = ? ", [req.query.id], (err, result, field) => {
+                if (err) console.log(err);
                 else
                     res.redirect("/userpanel?s=3")
             });
