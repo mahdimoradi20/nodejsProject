@@ -16,7 +16,8 @@
         #comments
         {
             background-color: rgb(235, 217, 172);
-            height: 300px;
+            height: 600px;
+            overflow: auto;
         }
 
         #newPost
@@ -50,13 +51,13 @@
             <p class="lead" style="color: red"><b>صفحه ای که در آن هستید پنل کاربری شماست! از اینجا میتوانید مطالب خود را برای دانشجویان منتشر
                 کنید نظرات آن ها را مشاهده و تایید یا رد نمایید</b></p>
             <hr class="my-4">
-            <a class = "btn btn-primary" href="">خروج</a>
+            <a class = "btn btn-primary" href="/exit">خروج</a>
 
         </div>
 
         <div class = "row">
             <div class = "col-md-12">
-                <p id = "newPost">قصد انتشار یک مطلب برای دانشجویان را دارید؟  بر روی  مطلب جدید کلیک کنید!<a class ="btn btn-primary" style="margin: 30px;;">مطلب جدید</a></p>
+                <p id = "newPost">قصد انتشار یک مطلب برای دانشجویان را دارید؟  بر روی  مطلب جدید کلیک کنید!<a class ="btn btn-primary" style="margin: 30px;" href="/editor" >مطلب جدید</a></p>
             </div>
         </div>
         {{{st}}}
@@ -65,14 +66,16 @@
                 <p style="font-size: larger;direction: rtl;">نظرات تایید نشده:</p>
     {{#comments}}
                 <div id = "postbox"  dir ="rtl" style="background-color: aqua;">
-                    <span class="buttons" style="font-size: 25px;color:brown">{{sname}}</span> <br />
+                    <span class="buttons" style="font-size: 25px;color:brown"><b>توسط</b>:{{sname}}</span> <br />
+                    <span class="buttons" style="font-size: 25px;color:brown"><b>در پست</b>:{{title}}</span> <br />
+                    <span class="buttons" style="font-size: 25px;color:brown"><b>تاریخ</b>:{{date}}</span> <br />
                     <span style = "margin-right: 10px;font-size: 20px;margin-top: 5px;">{{commentText}}</span>
                     <br /><a class="btn btn-success" style="margin-right: 50%;margin-top: 10px;margin-bottom: 10px;" href = "/confirmComment?id={{commentid}}">تایید</a>
                     <a class="btn btn-danger" class="buttons" href = "/delComment?id={{commentid}}" >عدم تایید</a>
                 </div>
     {{/comments}}
             </div>
-            <div class = "col-md-6" style="background-color: darkkhaki;height: 300px ;">
+            <div class = "col-md-6" style="background-color: darkkhaki;height: 600px ;overflow: auto;">
                 <p style="font-size: larger;direction: rtl;">پست های ارسالی توسط شما:</p>
                 <div id = "postbox"  dir ="rtl">
                     <span class="buttons" style="font-size: 25px;">عنوان پست اینجا می آید</span> <br />
