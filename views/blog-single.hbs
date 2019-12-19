@@ -85,8 +85,6 @@
                             <div id="frmComment">
                                 <form action="/addComment" method="POST" >
                                     <div class="form-group">
-                                        <label for="fullname">نام کابری</label>
-                                        <input type="text" name="username" class="form-control rounded-0 py-2">
                                     </div>
                                     
                                     <div class="form-group">
@@ -95,11 +93,12 @@
                                             class="form-control rounded-0"></textarea>
                                     </div>
                                     <input type = "hidden" value = "{{postid}}" name = "pid" />
+                        {{/data}}
                                     <input type="submit" value="ارسال">
+                                    {{{st}}} 
                                 </form>
                             </div>
                         </div>
-                        {{/data}}
                         <div class="col-12">
                             <div class="Comments">
                                 <ul>

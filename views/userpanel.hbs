@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link rel="stylesheet" href="assets/bootstrap.min.css">
-    <script src="assets/jquery-3.3.1.min.js"></script>
-    <script src="assets/bootstrap.min.js"></script>
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="assets/css/lib/bootstrap.min.css">
+    <script src="assets/js/lib/jquery-3.3.1.min.js"></script>
+    <script src="assets/js/lib/bootstrap.min.js"></script>
     <style>
         body{
             background-color: mediumturquoise ;
@@ -59,16 +59,18 @@
                 <p id = "newPost">قصد انتشار یک مطلب برای دانشجویان را دارید؟  بر روی  مطلب جدید کلیک کنید!<a class ="btn btn-primary" style="margin: 30px;;">مطلب جدید</a></p>
             </div>
         </div>
-
+        {{{st}}}
         <div class = "row" style = "margin-top: 30px;">
             <div class = "col-md-6" id = "comments">
                 <p style="font-size: larger;direction: rtl;">نظرات تایید نشده:</p>
+    {{#comments}}
                 <div id = "postbox"  dir ="rtl" style="background-color: aqua;">
-                    <span class="buttons" style="font-size: 25px;color:brown">نام نظر دهنده اینجا می آید</span> <br />
-                    <span style = "margin-right: 10px;font-size: 20px;margin-top: 5px;">متن نظر در اینجا می آید</span>
+                    <span class="buttons" style="font-size: 25px;color:brown">{{sname}}</span> <br />
+                    <span style = "margin-right: 10px;font-size: 20px;margin-top: 5px;">{{commentText}}</span>
                     <br /><a class="btn btn-success" style="margin-right: 50%;margin-top: 10px;margin-bottom: 10px;">تایید</a>
-                    <a class="btn btn-danger" class="buttons" >عدم تایید</a>
+                    <a class="btn btn-danger" class="buttons" href = "/delComment?id={{commentid}}" >عدم تایید</a>
                 </div>
+    {{/comments}}
             </div>
             <div class = "col-md-6" style="background-color: darkkhaki;height: 300px ;">
                 <p style="font-size: larger;direction: rtl;">پست های ارسالی توسط شما:</p>

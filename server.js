@@ -167,14 +167,16 @@ app.post("/search", (req, res) => {
 
 app.get("/getpost", (req, res) => {
     if (req.session.user) {
+        let status;
+        if(req.query.s == 'ok') status = "<p>نظر با موفقیت ارسال شد. و پس از تایید به نمایش در خواهد آمد</p>" ;
         connection.query("Select * from posts where postid = " + req.query.id, (err, result, field) => {
             if (err) console.log(err)
             else {
-                connection.query('SELECT username,commentText,commentdate from posts,comments,users where comments.postid = posts.postid and comments.userid = users.userid and posts.postid = ' + req.query.id + " order by commentdate DESC ",[],(err2,result2,field2)=>{
+                connection.query('SELECT username,commentText,commentdate from posts,comments,users where comments.postid = posts.postid and comments.userid = users.userid and status = "ok" and posts.postid = ' + req.query.id + "  order by commentdate DESC ",[],(err2,result2,field2)=>{
                     if(err2)console.log(err2);
                     else
                     {
-                        res.render("blog-single", { data: result , comments : result2});
+                        res.render("blog-single", { data: result , comments : result2 , st : status});
                     }
                 });
             }
@@ -212,12 +214,12 @@ let copyUploadedfile = (oldpath, newpath) => {
 
 let formatDate = (date) => {
     var year = date.getFullYear(),
-        month = date.getMonth() + 1, // months are zero indexed
+        month = date.getMonth() + 1, 
         day = date.getDate(),
         hour = date.getHours(),
         minute = date.getMinutes(),
         second = date.getSeconds(),
-        hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+        hourFormatted = hour % 12 || 12,
         minuteFormatted = minute < 10 ? "0" + minute : minute,
         morning = hour < 12 ? "am" : "pm";
     if (morning == "pm")
@@ -287,9 +289,9 @@ app.post('/addComment',  (req, res) => {
             else {
                 userid = result[0]['userid'];
                 let commentdate = formatDate(new Date())
-                connection.query("insert into comments (commentText,postid,userid,commentdate) values (?,?,?,?)",
-                 [req.body.commentTxt,postid,userid,commentdate] , (err2,results2,field2)=>{
-                     res.redirect("/getpost?id="+postid);
+                connection.query("insert into comments (commentText,postid,userid,commentdate,status) values (?,?,?,?,?)",
+                 [req.body.commentTxt,postid,userid,commentdate,'waiting'] , (err2,results2,field2)=>{
+                     res.redirect("/getpost?id="+postid + '&s=ok');
                  });
             }
         });
@@ -297,6 +299,76 @@ app.post('/addComment',  (req, res) => {
     else {
         res.redirect("/");
     }
+});
+
+let getUserID = (username)=>{
+    return new Promise((resolve,reject)=>{
+        connection.query("Select userid from users where username =  ? ",[username],(err,result,field)=>{
+            if(err) reject(err);
+            else
+                resolve(result[0]['userid']);
+        });
+    });
+}
+
+let getUsername = (userid)=>{
+    return new Promise((resolve,reject)=>{
+        connection.query('Select username from users where userid = ?',[userid],(err,result,field)=>{
+            if(err) reject(err);
+            else
+                resolve(result[0]['username']);
+        })
+    });
+}
+
+let getComments = (userid)=>{
+    return new Promise((resolve,reject)=>{
+        connection.query("SELECT commentid,title, commentText, comments.userid as sname, comments.commentdate as date from posts,users,comments where status = 'waiting' and posts.userid = users.userid and comments.postid = posts.postid and posts.userid = ?",
+        [userid],(err,result,field)=>{
+            if(err) reject(err);
+            else
+                resolve(result);
+        });
+    });
+}
+
+app.get('/userpanel',async (req,res)=>{
+
+    if(req.session.user)
+    {
+        let status;
+        if(req.query.s == 1)
+        {
+            status = "<p style = 'color : green; font-size : 25px'>نظر با موفقیت حذف شد</p>"
+        }
+        let userid = await getUserID(req.session.user);
+        let post_comments = await getComments(userid);
+        for(i = 0 ; i < post_comments.length; i++)
+            post_comments[i]['sname'] = await  getUsername(post_comments[i]['sname']);
+        res.render("userpanel" , {comments : post_comments , st : status});
+        
+    }
+    else
+        res.redirect("/");
+});
+
+
+app.get("/delComment",(req,res)=>{
+    if(req.session.user)
+    {
+        if(req.session.type == 'استاد')
+        {
+            connection.query("delete from comments where commentid = ?",[req.query.id],(err,result,field)=>{
+                if(err) console.log(err);
+                else
+                    res.redirect("/userpanel?s=1")
+            });
+        }
+        else
+            res.send("شما اجازه چنین کاری را ندارید!");
+    }
+    else
+        res.redirect('/');
 });
 
 console.log("App is running on Port 80...");
