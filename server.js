@@ -285,8 +285,11 @@ app.post("/addPost", (req, res) => {
                         res.render('editor', { info: '<p style = "border-style : solid;color : yellow; fontsize : 40px;background-color : red;direction : rtl" >عنوان نمیتواند خالی باشد</p>' });
                         return;
                     }
+                    if(picname != "default.jpg") picname = req.session.user + "/" + picname;
+                    if(filename != "") filename = req.session.user + "/" + filename;
+                    
                     connection.query("insert into posts (text,userid,title,path,attach,date) values(?,?,?,?,?,?)",
-                        [text, userid, title, req.session.user + "/" + picname, req.session.user + "/" + filename, datetime], (err3, results2, field2) => {
+                        [text, userid, title, picname, filename, datetime], (err3, results2, field2) => {
                             if (err3) console.log(err3);
                             res.render("editor", { info: '<p style = "border-style : solid;color : black; fontsize : 40px;background-color : lightgreen;direction :rtl">پست با موفقیت ارسال شد!</p>' });
                         });
