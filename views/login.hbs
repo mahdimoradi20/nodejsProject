@@ -10,7 +10,7 @@
 
 </head>
 
-<body>
+<body dir="rtl">
     <!-- partial:index.partial.html -->
     <div class="form">
 
@@ -19,7 +19,7 @@
             <li class="tab active"><a href="#login">ورود به سیستم</a></li>
         </ul>
 
-        <div class="tab-content">
+        <div class="tab-content" dir="rtl">
 
             <div id="login">
                 <h1>خوش آمدید</h1>
@@ -70,10 +70,15 @@
                     </div>
 
                     <div class="field-wrap">
-                        <label>
+                        <span style="direction: rtl;font-size: 22px;font-weight: bold;color: white;">نوع حساب:</span><span class="req"></span>
+                       <!-- <label> 
                             نوع حساب<span class="req">*</span>
-                        </label>
-                        <input type="text" required autocomplete="off" name="type" />
+                        </label>-->
+                        <!--<input type="text" required autocomplete="off" name="type" />-->
+                        <select name = "type" style="width: 100%;height: 50px;font-size: 22px;background-color: rgb(48, 82, 197);color : white;direction: rtl;">
+                            <option value="استاد" >استاد</option>
+                            <option value="دانشجو">دانشجو</option>
+                        </select>
                     </div>
 
                     <div class="field-wrap">

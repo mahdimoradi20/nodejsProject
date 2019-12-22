@@ -32,12 +32,13 @@
 
 </head>
 
-<body>
+<body style="background-color: lightgreen;">
 
     <!--------------------------BreadCrumbs Start-------------------------->
     <section id="BreadCrumbs">
         <div class="parallax">
             <p class="breadcrumb py-5">
+                <a href="/blog" class="breadcrumb-item">بازگشت به صفحه اصلی</a>
                 <a href="/userpanel" class="breadcrumb-item">پنل کاربری</a>
                 <a href="/exit" class="breadcrumb-item">خروج</a>
             </p>
@@ -50,18 +51,19 @@
     <section id="Main">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-8 p-3" id="MainRightCol" style="background-color: dimgray">
+                <div class="col-8 p-3" id="MainRightCol" style="background-color: lightgreen">
                     <div class="row">
 
                         {{#data}}
 
 
                         <div class="col-6">
-                            <div class="BlogCard" style="background-color: yellowgreen">
+                            <div class="BlogCard" style="background-color: cornflowerblue">
                                 <div class="BlogCardHeader">
                                     <img src="/postfiles/{{path}}" alt="">
                                     <ul dir="rtl">
-                                        <li><span style = "font-size: 30px;" class="fa fa-user mr-1"></span><span style = "font-size: 30px;">{{name}}</span></li>
+                                        <li><span style="font-size: 30px;" class="fa fa-user mr-1"></span><span
+                                                style="font-size: 30px;">{{name}}</span></li>
                                         <li><span class="fa fa-clock mr-1"></span>{{date}}<span></span></li>
                                         <!--<li><span class="fa fa-comment mr-1"></span>{{count}}</li> -->
                                     </ul>
@@ -93,7 +95,7 @@
                     <div class="row justify-content-center" id="pagination">
                         <div class="col-6">
                             <!----------------->
-                           <!-- <ul class="nav">
+                            <!-- <ul class="nav">
                                 <li class="nav-item">
                                     <a href="#" class="navlink">
                                         <span class="fa fa-angle-right"></span>
@@ -104,12 +106,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-4" id="MainLeftCol" style="background-color: rgb(247, 118, 214);">
+                <div class="col-4" id="MainLeftCol" style="background-color : gray">
                     <div class="sticky-top">
                         <div>
                             <form action="/search" id="frmSearch" method="POST">
                                 <div class="InputGroup">
-                                    <input class="InputGropInput" type="text" placeholder=" جست و جو در عناوین مطالب ..." name="searchphase">
+                                    <input class="InputGropInput" type="text"
+                                        placeholder=" جست و جو در عناوین مطالب ..." name="searchphase">
                                     <button class="InputGroupIcon" type="submit"><span
                                             class="fa fa-search"></span></button>
                                 </div>
@@ -122,11 +125,12 @@
                             <div class="CatBody">
                                 <ul>
                                     {{#topfivepost}}
-                                    <li style="border-radius: 10%;border-style: solid;font-size: 20px;background-color: aqua;margin-top: 10px;">
-                                        
-                                        <a style = "margin :10px" href = "/getpost?id={{postid}}">{{title}}</a>
+                                    <li
+                                        style="border-radius: 10%;border-style: solid;font-size: 20px;background-color: rgb(212, 253, 253);margin-top: 10px;">
+
+                                        <a style="margin :10px" href="/getpost?id={{postid}}">{{title}}</a>
                                         <span style="margin : 10px;">توسط:{{name}}</span>
-                                        
+
                                     </li>
                                     {{/topfivepost}}
                                 </ul>
@@ -136,21 +140,21 @@
                             <div class="CatHeader">
                             </div>
                             <div class="CatBody">
-                                
+
                             </div>
                         </div>
                         <div class="Cat" id="Links">
                             <div class="CatHeader">
                             </div>
                             <div class="CatBody">
-                                
+
                             </div>
                         </div>
                         <div class="Cat" id="Archive">
                             <div class="CatHeader">
                             </div>
                             <div class="CatBody">
-                                
+
                             </div>
                         </div>
                     </div>
